@@ -1,0 +1,67 @@
+---
+title: "lab-3b"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(MASS)
+data('Boston')
+```
+
+```{r Boston}
+summary(Boston)
+#2.
+ggplot(data = Boston, aes(rm, medv)) + geom_point() 
+#3.
+ggplot(data = Boston, aes(crim, medv)) + geom_point()
+#4.
+ggplot(data = Boston, aes(rm, medv)) + geom_point(aes(colour = (age)), size=0.75)
+```
+
+```{r suite}
+#5.
+ggplot(data = Boston, aes(crim, medv)) + geom_point(aes(rm,medv)) +  geom_point(aes(colour = (age)), size=0.75) + geom_smooth()
+
+#6.
+ggplot(data = Boston, aes(rm, medv)) + geom_point(aes(colour = (age)), size=0.75) + geom_smooth(method = "lm", size=.5)
+```
+
+```{r facet}
+#7.
+ggplot(data = Boston, aes(rm, medv)) + geom_point(aes(colour = (age)), size=0.75) + geom_smooth(method = "lm", size=.5) + facet_grid(. ~ rad)
+
+#Methode 2
+ggplot(data = Boston, aes(rm, medv)) + geom_point(aes(colour = (age)), size=0.75) + geom_smooth(method = "lm", size=.5) + facet_wrap(. ~ rad)
+
+
+```
+
+```{r Boston}
+#8.
+ggplot(data=Boston, aes(x=medv)) + geom_histogram(color='grey')
+```
