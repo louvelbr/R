@@ -13,3 +13,6 @@ Exercices in R language
 
 # Lab 3.b: Introduction to ggplot2 with Boston dataset
 => PDF
+
+# Lab 7: Who dataset
+=> PDF
