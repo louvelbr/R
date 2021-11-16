@@ -1,0 +1,205 @@
+---
+title: "Assignement 1"
+author: "Louve Le Bronec"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r library}
+library(tidyr)
+
+# read the csv file
+housing.dataset <- read.csv("melbourne_data.csv")
+
+# See the structure of the data
+str(housing.dataset)
+```
+
+```{r 3.Task - question 1.}
+# 3. Task
+
+# Question 1
+
+# remove the na values
+housing.dataset <- housing.dataset %>% drop_na()
+
+# remove the outliers and incorrect values
+
+#Display boxplot to see the outliers
+boxplot(housing.dataset)
+
+#Remove the outliers in function of the quantiles 
+
+#Price
+outliers <- boxplot(housing.dataset$Price, plot=FALSE)$out
+x<-housing.dataset 
+housing.dataset<- x[-which(x$Price %in% outliers),]
+
+#Landsize
+outliers <- boxplot(housing.dataset$Landsize, plot=FALSE)$out
+x<-housing.dataset 
+housing.dataset<- x[-which(x$Landsize %in% outliers),]
+
+#BuildingArea
+outliers <- boxplot(housing.dataset$BuildingArea, plot=FALSE)$out
+x<-housing.dataset 
+housing.dataset<- x[-which(x$BuildingArea %in% outliers),]
+
+#Rooms
+outliers <- boxplot(housing.dataset$Rooms, plot=FALSE)$out
+x<-housing.dataset 
+housing.dataset<- x[-which(x$Rooms %in% outliers),]
+
+#Bathrooms
+outliers <- boxplot(housing.dataset$Bathroom, plot=FALSE)$out
+x<-housing.dataset 
+housing.dataset<- x[-which(x$Bathroom %in% outliers),]
+
+#Car
+outliers <- boxplot(housing.dataset$Car, plot=FALSE)$out
+x<-housing.dataset 
+housing.dataset<- x[-which(x$Car %in% outliers),]
+
+#Removing incorrect values
+housing.dataset <- housing.dataset[!(housing.dataset$Landsize == 0 | housing.dataset$BuildingArea == 0 | housing.dataset$Price == 0), ]
+
+#Summary and boxplot to check if it worked
+# We can see that the outliers and incorrect values are not here anymore
+summary(housing.dataset)
+boxplot(housing.dataset$Price,  main="Boxplot for the price")
+boxplot(housing.dataset[5:6])
+boxplot(housing.dataset[7:9])
+boxplot(housing.dataset$YearBuilt, main="Boxplot for the year the house was built")
+```
+
+```{r question 2.}
+# Question 2
+
+#summarise the datas
+summary(housing.dataset)
+#With the summary we can see the minimum, the maximum, the mean and the median of each variables. For example, for the rooms there is minimum 1 room and maximum 6 rooms per house but the most of the house have 3 rooms and have an average of 3 or 4 rooms per houses.
+
+#Barplot
+count <- table(housing.dataset$Car)
+barplot(count, main = "Barchart of the number of carspots by house", xlab="Number of carspots", ylab="frequency")
+
+#Piechart
+count <- table(housing.dataset$Regionname)
+pie(count, main = "Pie chart of the regions")
+
+#Histogram
+distance <- as.numeric(housing.dataset$Distance)
+hist(distance, xlab = "Distances", main = "Histogram of Distances")
+
+#Scatter plot
+plot(distance, housing.dataset$Price, main="Price in function of distance from CBD", xlab="Distance", ylab="Price")
+```
+```{r question 3.a}
+# Question 3.a
+
+library(ggplot2)
+#summary of the price to have more infos
+summary(housing.dataset$Price)
+#calcul of the variance
+var(housing.dataset$Price)
+#Histogram methode 1
+hist(housing.dataset$Price, xlab = "Price", main = "Histogram of the prices")
+
+#Methode 2
+ggplot(housing.dataset, aes(Price)) +
+    geom_histogram(color = "black", fill = "green") +
+    geom_vline(xintercept = mean(housing.dataset$Price)) + 
+    geom_vline(xintercept = median(housing.dataset$Price), color ="red")
+#We can see with this graph and the summary that the most of the houses cost around 910250$ but the average price is 1024266$ it's more than the median because there are some really expensive houses. And the variance is 203427309529 so there are a lot of different prices
+```
+```{r question 3.b}
+# Question 3
+
+#Different separations for the prices (in function of quantiles and median)
+# low: < 695000$
+#medium: 695000$ to 955000$
+#medium high: 955000$ to 1401000$
+#high : 1401000$ to 9000000$
+summary(housing.dataset$Price)
+
+#Cuting the datas
+housing.dataset$PriceCategory <- cut(housing.dataset$Price, breaks = quantile(housing.dataset$Price), labels = c("low","medium low","medium high","high"))
+
+#summary for the different categories
+summary(housing.dataset$PriceCategory)
+
+
+#1633 houses have a price less than 131000$; 1627 houses are between 131000$ and  676000$; 1656 houses are between  676000$ and 1300000$ and 1656 houses are between 1300000$ and 2400000$ 
+```
+
+```{r question 3.c}
+
+# Question 3.c
+
+# Prices by type of houses 
+boxplot(housing.dataset$Price~housing.dataset$Type, xlab="Type", ylab="Price", main="Price by type of houses")
+
+#Method 2
+ggplot(housing.dataset, aes(x=Type, y=Price, fill=Type)) + 
+  geom_boxplot(alpha=0.3) +
+  stat_summary(fun=mean, geom="point", shape=20, size=4, color="red", fill="red")+
+  theme(legend.position="none")+
+  ggtitle("Boxplot of Price by type")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+# We can see that houses type h are the more expensive and the houses type u are the cheaper.
+```
+```{r question 3.d}
+# Question 3.d
+# display the different variables
+head(housing.dataset)
+
+#calcul and dosplay of the correlation values
+round(cor(housing.dataset[,c(1,4:10)]),2)
+#We can see that the price is most correlated with the buildingArea, the rooms and bathrooms because the values closer to 1.
+```
+```{r question 4}
+# Question 4
+
+#frequencies
+#display number of houses of each type
+table(unlist(housing.dataset$Type))
+#calcul the total number of houses
+sum <- 5350+612+560 
+#calcul the frequencies
+housesH <- 5350/sum * 100
+housesH
+housesT <- 612/sum * 100
+housesT
+housesU <- 560/sum * 100
+housesU
+#82.03% of houses are type h, 9.38% of the houses are type t and 8.59% are type u.
+
+# Scatterplot for the price and the landsize
+#Scatter plot 1
+plot(housing.dataset$Landsize, housing.dataset$Price, main="Price in function of landsize", xlab="Landsize", ylab="Price", col=housing.dataset$Price)
+
+#Methode 2
+ggplot(housing.dataset, aes(x=Landsize, y=Price, color=Price)) + geom_point() +
+  ggtitle("Price in function of landsize")
+
+# Scatterplot for the price and the type of house
+#Scatter plot 2
+plot(housing.dataset$Type, housing.dataset$Price, main="Price in function of Type of houses", xlab="Distance", ylab="Price")
+
+#Methode 2
+ggplot(housing.dataset, aes(x=Type, y=Price, color=Price)) + geom_point() +
+  ggtitle("Price by type of houses")
+
+
+```
+
+
+
+
