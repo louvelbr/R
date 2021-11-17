@@ -19,3 +19,6 @@ Exercices in R language
 
 # Assignement 1: Melbourne dataset
 => PDF
+
+# Lab 8: Rnorm, pnorm, qnorm
+=> PDF
