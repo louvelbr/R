@@ -16,3 +16,6 @@ Exercices in R language
 
 # Lab 7: Who dataset
 => PDF
+
+# Assignement 1: Melbourne dataset
+=> PDF
