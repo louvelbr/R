@@ -22,3 +22,6 @@ Exercices in R language
 
 # Lab 8: Rnorm, pnorm, qnorm
 => PDF
+
+# Lab 9: Confidence intervals, normal distribution
+=> PDF
