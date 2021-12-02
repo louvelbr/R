@@ -25,3 +25,6 @@ Exercices in R language
 
 # Lab 9: Confidence intervals, normal distribution
 => PDF
+
+# Assignement 2: Melbourne dataset part 2
+=> PDF
