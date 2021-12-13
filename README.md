@@ -1,5 +1,5 @@
 # R
-Exercices in R language
+Exercices of Big Data Analytics in R language
 
 # Lab 1: Introduction to R language
 => PDF
